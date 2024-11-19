@@ -3,21 +3,18 @@ name: Docker CI
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
-
   test_dockerized_webserver:
-
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -39,6 +36,9 @@ jobs:
 
       - name: Launch Web Service
         run: docker compose up -d
+
+      - name: Wait For Webserver
+        run: ./wait-for-webserver.sh
 
       - name: Run Selenium Tests
         run: cd selenium && mvn test
